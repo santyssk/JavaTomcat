@@ -67,12 +67,21 @@ public class BasicCalculator extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String expression = request.getParameter("expression");
+		if(expression != null && expression.length() > 0) {
+			
+			String result;
+			try{
+				int value = calculate(expression);
+				result = "The value of the expression "
+						+ expression + " is "+ String.valueOf(value);
+			}
+			catch(Exception e) {
+				result = "The expression is not a valid one. Please check for errors";
+			}
+			request.setAttribute("result", result);
+			request.getRequestDispatcher("home.jsp").forward(request, response);
+		}
 		
-		int value = calculate(expression);
-		
-		request.setAttribute("question", expression);
-		request.setAttribute("value", value);
-	    request.getRequestDispatcher("index.jsp").forward(request, response);
 	}
 
 }

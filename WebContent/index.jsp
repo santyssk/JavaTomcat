@@ -4,13 +4,16 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Santhosh Kumar</title>
+<title>Login Page</title>
 <link href="/css/format.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-	<form action="BasicCalculator">
-		Enter a valid arithmetic expression : <input type="text" name="expression"><br><br>
-		<input type="submit" value="Calculate"><br><br>
-		The value of the expression ${question} is <span id="result">${value}</span>
-	</form></body>
+	Hi there!!!
+	<form action="Login">
+		Enter username : <input type="text" name="username"><br><br>
+		Enter password : <input type="password" name="password"><br><br>
+		<input type="submit" value="Login">		
+	</form>
+	<span id="result">${errorMessage}</span>
+</body>
 </html>

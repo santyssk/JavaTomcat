@@ -16,6 +16,11 @@
 	%>
 	Welcome ${username}!!!
 	<br>
+	<form action="BasicCalculator">
+		Enter a valid arithmetic expression : <input type="text" name="expression"><br><br>
+		<input type="submit" value="Calculate"><br><br>
+		<span id="result">${result}</span>
+	</form>
 	<form action="Logout">
 		<input type="submit" value="Logout">
 	</form>

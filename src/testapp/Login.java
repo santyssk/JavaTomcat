@@ -17,8 +17,8 @@ public class Login extends HttpServlet {
 		String password = request.getParameter("password");
 		
 		if(username == null || password == null || username.length() == 0) {
-			response.sendError(1,"Enter Credentials");
-			response.sendRedirect("login.jsp");
+			request.setAttribute("errorMessage", "Enter Credentials");
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 		else if(password.equals("123")) {
 			HttpSession httpSession = request.getSession();
@@ -26,8 +26,8 @@ public class Login extends HttpServlet {
 			response.sendRedirect("home.jsp");
 		}
 		else {
-			response.sendError(2,"Invalid Credentials");
-			response.sendRedirect("login.jsp");
+			request.setAttribute("errorMessage", "Invalid Credentials");
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 	}
 
