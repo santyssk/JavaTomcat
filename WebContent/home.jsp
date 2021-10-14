@@ -5,6 +5,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Home page</title>
+<link href="/css/format.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<%
