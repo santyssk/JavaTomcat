@@ -1,0 +1,33 @@
+version: 0.1
+component: build
+timeoutInSeconds: 6000
+runAs: root
+shell: bash
+env:
+  # these are local variables to the build config
+  variables:
+
+  # exportedVariables are made available to use as parameters
+  # in successor Build Pipeline stages
+  exportedVariables:
+    - BUILDRUN_HASH
+# For this Build to run, the Build Pipeline needs to have a build_version
+# paramerter set
+
+steps:
+  - type: Command
+    name: "Export variables"
+    timeoutInSeconds: 40
+    command: |
+      export BUILDRUN_HASH='echi {OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
+      echo "BUILDRUN_HASH: $BUILDRUN_HASH"
+    onFailure:
+      - type: Command
+        timeoutInSeconds: 40
+        command: |
+          echo "Handling Failures"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 400
+        runAs: root
+
+outputArtifacts:
