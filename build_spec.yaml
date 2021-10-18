@@ -30,4 +30,41 @@ steps:
         timeoutInSeconds: 400
         runAs: root
 
+  - type: Command
+    timeoutInSeconds: 600
+    name: "Install Prereqs"
+    command: |
+      cd ${OCI_WORKSPACE_DIR}/
+      # Install tomcat
+      wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.zip
+      unzip apache-tomcat-8.5.72.zip
+      # Version
+      cd apache-tomcat-8.5.72.zip
+      java -cp lib/catalina.jar org.apache.catalina.util.ServerInfo
+      # Make Executable
+      cd bin
+      chmod +x *.sh
+
+    onFailure:
+      - type: Command
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 40
+        runAs: root
+
+  - type: Command
+    timeoutInSeconds: 600
+    name: "Start server"
+    command: |
+      ./startup.sh
+    onFailure:
+      - type: Command
+        command: |
+          echo "Handling Failure"
+          echo "Failure successfully handled"
+        timeoutInSeconds: 40
+        runAs: root
+
+
 outputArtifacts:
