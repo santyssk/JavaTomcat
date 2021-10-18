@@ -1,4 +1,4 @@
-package testapp;
+package com.groupTest;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
