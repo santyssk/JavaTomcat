@@ -35,6 +35,9 @@ steps:
     name: "Install Prereqs"
     command: |
       cd ${OCI_WORKSPACE_DIR}/
+      # Maven
+      wget https://dlcdn.apache.org/maven/maven-3/3.8.3/source/apache-maven-3.8.3-src.zip
+      unzip apache-maven-3.8.3-src.zip
       # Install tomcat
       wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.zip
       unzip apache-tomcat-8.5.72.zip
@@ -55,9 +58,12 @@ steps:
 
   - type: Command
     timeoutInSeconds: 600
-    name: "Start server"
+    name: "Mvn install"
     command: |
-      ./startup.sh
+      cd ${OCI_WORKSPACE_DIR}/
+      mvn clean
+      mvn generate-sources
+      mvn build
     onFailure:
       - type: Command
         command: |
@@ -68,3 +74,4 @@ steps:
 
 
 outputArtifacts:
+  - name: output
