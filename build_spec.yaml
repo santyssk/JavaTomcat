@@ -4,74 +4,26 @@ timeoutInSeconds: 6000
 runAs: root
 shell: bash
 env:
-  # these are local variables to the build config
-  variables:
-
-  # exportedVariables are made available to use as parameters
-  # in successor Build Pipeline stages
   exportedVariables:
-    - BUILDRUN_HASH
-# For this Build to run, the Build Pipeline needs to have a build_version
-# paramerter set
-
+    - JavaMavenAppVersion
 steps:
   - type: Command
-    name: "Export variables"
-    timeoutInSeconds: 40
+    name: "Build Source"
+    timeoutInSeconds: 4000
     command: |
-      export BUILDRUN_HASH='echi {OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
-      echo "BUILDRUN_HASH: $BUILDRUN_HASH"
-    onFailure:
-      - type: Command
-        timeoutInSeconds: 40
-        command: |
-          echo "Handling Failures"
-          echo "Failure successfully handled"
-        timeoutInSeconds: 400
-        runAs: root
-
+      echo $PATH
+      mvn clean install
   - type: Command
-    timeoutInSeconds: 600
-    name: "Install Prereqs"
+    name: "Dockerizer"
+    timeoutInSeconds: 400
     command: |
-      cd ${OCI_WORKSPACE_DIR}/
-      # Maven
-      wget https://dlcdn.apache.org/maven/maven-3/3.8.3/source/apache-maven-3.8.3-src.zip
-      unzip apache-maven-3.8.3-src.zip
-      # Install tomcat
-      wget https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.72/bin/apache-tomcat-8.5.72.zip
-      unzip apache-tomcat-8.5.72.zip
-      # Version
-      cd apache-tomcat-8.5.72.zip
-      java -cp lib/catalina.jar org.apache.catalina.util.ServerInfo
-      # Make Executable
-      cd bin
-      chmod +x *.sh
-
-    onFailure:
-      - type: Command
-        command: |
-          echo "Handling Failure"
-          echo "Failure successfully handled"
-        timeoutInSeconds: 40
-        runAs: root
-
-  - type: Command
-    timeoutInSeconds: 600
-    name: "Mvn install"
-    command: |
-      cd ${OCI_WORKSPACE_DIR}/
-      mvn clean
-      mvn generate-sources
-      mvn build
-    onFailure:
-      - type: Command
-        command: |
-          echo "Handling Failure"
-          echo "Failure successfully handled"
-        timeoutInSeconds: 40
-        runAs: root
-
-
+      JavaMavenAppVersion='echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
+      echo $JavaMavenAppVersion
+      docker build -t java-maven-app .
 outputArtifacts:
-  - name: output
+  - name: java-maven-app
+    type: DOCKER_IMAGE
+    location: java-maven-app
+  - name: java-maven-app-kube-manifest
+    type: BINARY
+    location: app.yaml

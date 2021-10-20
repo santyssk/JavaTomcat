@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: java-maven-app
+  lables:
+    app: java-maven-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: java-maven-app
+  template:
+    metadata:
+      lables:
+        app: java-maven-app 
+    spec:
+      containers:
+        - name: java-maven-app 
+        image: iad.ocir.io/idrbkizrtukj/java-docker-ssk:${JavaMavenAppVersion}
+        ports:
+          - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: java-maven-app-service
+  lables:
+    app: java-maven-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: java-maven-app
