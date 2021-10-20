@@ -17,7 +17,7 @@ steps:
     name: "Dockerizer"
     timeoutInSeconds: 400
     command: |
-      JavaMavenAppVersion='echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
+      export JavaMavenAppVersion='echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
       echo $JavaMavenAppVersion
       docker build -t java-maven-app .
 outputArtifacts:
