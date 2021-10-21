@@ -14,7 +14,7 @@ steps:
       export BUILDRUN_HASH='echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
       echo "BUILDRUN_HASH: $BUILDRUN_HASH"
   - type: Command
-    name: "Build Source"
+    name: "Mvn install"
     timeoutInSeconds: 4000
     command: |
       echo $PATH
@@ -24,7 +24,7 @@ steps:
     timeoutInSeconds: 1200
     command: |
       cd ${OCI_WORKSPACE_DIR}/github_JavaTomcat
-      docker build --pull --rm -t java-maven-app -f DOCKERFILE .
+      docker build --pull --rm -t java-maven-app -f Dockerfile .
 outputArtifacts:
   - name: output
     type: DOCKER_IMAGE
