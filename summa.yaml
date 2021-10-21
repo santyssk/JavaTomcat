@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: java-mavenapp 
-          image: iad.ocir.io/idrbkizrtukj/java-maven-app-ssk:${BUILDRUN_HASH}
+          image: iad.ocir.io/idrbkizrtukj/java-maven-app-ssk
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
