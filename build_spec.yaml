@@ -31,4 +31,4 @@ outputArtifacts:
     location: java-maven-app:latest
   - name: java-mavenapp-service-kube-manifest
     type: BINARY
-    location: app.yaml
+    location: summa.yaml
