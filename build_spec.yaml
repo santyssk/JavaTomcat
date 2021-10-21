@@ -29,6 +29,6 @@ outputArtifacts:
   - name: output01
     type: DOCKER_IMAGE
     location: java-maven-app:latest
-  - name: java-maven-app-kube-manifest
+  - name: java-mavenapp-service-kube-manifest
     type: BINARY
     location: app.yaml
