@@ -26,7 +26,7 @@ steps:
       cd ${OCI_WORKSPACE_DIR}/github_JavaTomcat
       docker build --pull --rm -t java-maven-app -f Dockerfile .
 outputArtifacts:
-  - name: output01
+  - name: output02
     type: DOCKER_IMAGE
     location: java-maven-app:latest
   - name: java-mavenapp-service-kube-manifest
