@@ -1,9 +1,13 @@
+kind: namespace
+apiVersion: v1
+metadata:
+  name: ${namespace}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: java-maven-app
-  lables:
-    app: java-maven-app
+  namespace: ${namespace}
 spec:
   replicas: 3
   selector:
@@ -16,20 +20,24 @@ spec:
     spec:
       containers:
         - name: java-maven-app 
-        image: iad.ocir.io/idrbkizrtukj/java-docker-ssk:${JavaMavenAppVersion}
-        ports:
-          - containerPort: 8080
+          image: iad.ocir.io/idrbkizrtukj/java-docker-ssk:${BUILDRUN_HASH}
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              protocol: TCP
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: java-maven-app-service
-  lables:
-    app: java-maven-app
+  namespace: ${namespace}
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-shape: "10Mbps"
 spec:
   type: LoadBalancer
   ports:
-    - port: 8080
-      targetPort: 8080
+    - port: 80
+      protocol: TCP
+      targetPort: 3000
   selector:
     app: java-maven-app

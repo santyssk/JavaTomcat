@@ -5,8 +5,14 @@ runAs: root
 shell: bash
 env:
   exportedVariables:
-    - JavaMavenAppVersion
+    - BUILDRUN_HASH
 steps:
+  - type: Command
+    name: "Export variables"
+    timeoutInSeconds: 40
+    command: |
+      export BUILDRUN_HASH='echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
+      echo "BUILDRUN_HASH: $BUILDRUN_HASH"
   - type: Command
     name: "Build Source"
     timeoutInSeconds: 4000
@@ -14,16 +20,15 @@ steps:
       echo $PATH
       mvn clean install
   - type: Command
-    name: "Dockerizer"
-    timeoutInSeconds: 400
+    name: "Build Container image"
+    timeoutInSeconds: 1200
     command: |
-      export JavaMavenAppVersion='echo ${OCI_BUILD_RUN_ID} | rev | cut -c 1-7'
-      echo $JavaMavenAppVersion
-      docker build -t java-maven-app .
+      cd ${OCI_WORKSPACE_DIR}/github_JavaTomcat
+      docker build --pull --rm -t java-maven-app -f DOCKERFILE .
 outputArtifacts:
-  - name: java-maven-app
+  - name: output
     type: DOCKER_IMAGE
-    location: java-maven-app
+    location: java-maven-app:latest
   - name: java-maven-app-kube-manifest
     type: BINARY
     location: app.yaml
