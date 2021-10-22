@@ -23,12 +23,11 @@ steps:
     name: "Build Container image"
     timeoutInSeconds: 1200
     command: |
-      cd ${OCI_WORKSPACE_DIR}/github_JavaTomcat
       docker build --pull --rm -t java-maven-app -f Dockerfile .
 outputArtifacts:
   - name: output02
     type: DOCKER_IMAGE
-    location: java-maven-app:latest
+    location: java-maven-app
   - name: java-mavenapp-service-kube-manifest
     type: BINARY
     location: summa.yaml
